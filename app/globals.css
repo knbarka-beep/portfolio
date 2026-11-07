@@ -123,6 +123,14 @@ p {
 .pill-outline {
   border: 1px solid currentColor;
 }
+/* CV language buttons: all the same until hovered or focused by keyboard. */
+.pill-choice:hover,
+.pill-choice:focus-visible {
+  opacity: 1;
+  background: var(--btn);
+  border-color: var(--btn);
+  color: var(--on-btn);
+}
 
 /* Small arrow on links that open a new tab. */
 .ext-icon {

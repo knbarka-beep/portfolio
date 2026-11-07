@@ -139,6 +139,7 @@ export const en: Content = {
     title: "Full CV (PDF)",
     intro: "Enter the code you received to download the CV.",
     choose: "Choose a language. The window stays open, so you can download more than one.",
+    downloaded: "downloaded",
     label: "Code",
     submit: "Continue",
     checking: "Checking…",
@@ -263,6 +264,18 @@ export const en: Content = {
   footer: {
     built: "Built with Claude Code by Knut Barka",
     code: "Code on GitHub",
+    privacy: "Privacy",
+  },
+  privacy: {
+    title: "Privacy",
+    description: "How this site handles your data.",
+    points: [
+      "This site uses no cookies, no analytics and no tracking.",
+      "If you switch between the light and dark theme, the choice is stored only in your own browser.",
+      "The site is hosted by Vercel. Vercel logs technical data, such as your IP address, for security and to keep the site running.",
+      "The full CV is only sent to people who enter the code.",
+    ],
+    contact: "Questions? Contact me on",
   },
   notFound: {
     title: "Page not found",

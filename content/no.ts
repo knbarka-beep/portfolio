@@ -140,6 +140,7 @@ export const no: Content = {
     title: "Full CV (PDF)",
     intro: "Skriv inn koden du har fått for å laste ned CV-en.",
     choose: "Velg språk. Vinduet blir stående åpent, så du kan laste ned mer enn én.",
+    downloaded: "lastet ned",
     label: "Kode",
     submit: "Fortsett",
     checking: "Sjekker…",
@@ -264,6 +265,18 @@ export const no: Content = {
   footer: {
     built: "Bygget med Claude Code av Knut Barka",
     code: "Koden på GitHub",
+    privacy: "Personvern",
+  },
+  privacy: {
+    title: "Personvern",
+    description: "Slik behandler nettstedet dataene dine.",
+    points: [
+      "Nettstedet bruker ingen informasjonskapsler (cookies), ingen analyseverktøy og ingen sporing.",
+      "Hvis du bytter mellom lyst og mørkt tema, lagres valget bare i din egen nettleser.",
+      "Nettstedet driftes av Vercel. Vercel logger tekniske data, for eksempel IP-adressen din, for sikkerhet og drift.",
+      "Full CV sendes bare til dem som skriver inn koden.",
+    ],
+    contact: "Spørsmål? Ta kontakt på",
   },
   notFound: {
     title: "Siden finnes ikke",

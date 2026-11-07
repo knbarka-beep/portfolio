@@ -36,6 +36,7 @@ export type Content = {
     title: string;
     intro: string;
     choose: string;
+    downloaded: string;
     label: string;
     submit: string;
     checking: string;
@@ -63,6 +64,7 @@ export type Content = {
     screenshotAlt: string;
   };
   projects: Record<"variance-cockpit" | "startup-runway" | "aml-queue", ProjectContent>;
-  footer: { built: string; code: string };
+  footer: { built: string; code: string; privacy: string };
+  privacy: { title: string; description: string; points: string[]; contact: string };
   notFound: { title: string; text: string; back: string };
 };

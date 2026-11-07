@@ -1,0 +1,7 @@
+# Dependabot checks the npm packages once a week and opens a pull request when one has an update.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly

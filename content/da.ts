@@ -139,6 +139,7 @@ export const da: Content = {
     title: "Fuldt CV (PDF)",
     intro: "Skriv den kode, du har fået, for at hente CV'et.",
     choose: "Vælg et sprog. Vinduet bliver åbent, så du kan hente mere end ét.",
+    downloaded: "hentet",
     label: "Kode",
     submit: "Fortsæt",
     checking: "Kontrollerer…",
@@ -263,6 +264,18 @@ export const da: Content = {
   footer: {
     built: "Bygget med Claude Code af Knut Barka",
     code: "Koden på GitHub",
+    privacy: "Privatliv",
+  },
+  privacy: {
+    title: "Privatliv",
+    description: "Sådan håndterer siden dine data.",
+    points: [
+      "Siden bruger ingen cookies, ingen analyseværktøjer og ingen sporing.",
+      "Skifter du mellem lyst og mørkt tema, gemmes valget kun i din egen browser.",
+      "Siden hostes af Vercel. Vercel logger tekniske data, fx din IP-adresse, af hensyn til sikkerhed og drift.",
+      "Det fulde CV sendes kun til dem, der indtaster koden.",
+    ],
+    contact: "Spørgsmål? Skriv til mig på",
   },
   notFound: {
     title: "Siden findes ikke",

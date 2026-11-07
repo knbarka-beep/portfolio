@@ -34,6 +34,10 @@ Light is the default. On the first visit the site follows the computer's setting
 
 The code is in `lib/cv.ts` (the check and the language choice, which tests can run with a fake PDF) and `app/api/cv/route.ts` (reads the real file from Blob). In `next dev` the route reads `private/cv-en.pdf`, `cv-da.pdf` or `cv-no.pdf` instead; `next.config.ts` keeps `private/` out of the build.
 
+## Privacy page
+
+The footer links to `/en/privacy` (and `/da/privacy`, `/no/privacy`). It says, in plain words: no cookies, no analytics, the theme choice stays in your browser, Vercel keeps technical logs, and the CV goes only to people with the code.
+
 ## How the PDF stays out of the repo
 
 `private/` and every `*.pdf` file are in `.gitignore`. A test (`tests/pdf.test.mjs`) fails if git tracks any PDF, or if a PDF turns up in `public/` or the build output. The PDF reaches Vercel only through a direct upload to the private Blob store.

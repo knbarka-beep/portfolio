@@ -35,6 +35,8 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
   const codeRef = useRef("");
   const id = useId();
   const [status, setStatus] = useState<Status>(available ? "idle" : "unavailable");
+  // Languages whose download has started in this dialog session. Shown as a check mark.
+  const [downloaded, setDownloaded] = useState<Locale[]>([]);
   const unlocked = status === "ready" || status === "downloading" || status === "done" || status === "failed";
   // The current page's language first, then the other two.
   const ordered = [...cvLangs].sort((a, b) => Number(b.value === lang) - Number(a.value === lang));
@@ -48,6 +50,7 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
 
   const open = () => {
     codeRef.current = "";
+    setDownloaded([]);
     if (status !== "unavailable") setStatus("idle");
     dialogRef.current?.showModal();
     dialogRef.current?.querySelector<HTMLInputElement>("input[name=code]")?.focus();
@@ -87,6 +90,7 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
       a.download = res.headers.get("content-disposition")?.match(/filename="(.+)"/)?.[1] ?? "Knut-Barka-CV.pdf";
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      setDownloaded((list) => (list.includes(cvLang) ? list : [...list, cvLang]));
       setStatus("done");
     } catch {
       setStatus("failed");
@@ -114,6 +118,7 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
         onClick={(e) => e.target === e.currentTarget && close()}
         onClose={() => {
           codeRef.current = "";
+          setDownloaded([]);
           if (status !== "unavailable") setStatus("idle");
         }}
       >
@@ -155,9 +160,17 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
                     onClick={() => download(option.value)}
                     disabled={status === "downloading"}
                     aria-describedby={`${id}-status`}
-                    className={`pill ${i === 0 ? "pill-primary" : "pill-outline"} w-full disabled:opacity-60`}
+                    className="pill pill-outline pill-choice w-full disabled:opacity-60"
                   >
                     <span lang={option.htmlLang}>{option.name}</span>
+                    {downloaded.includes(option.value) && (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                          <path d="M5 12.5l4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span className="sr-only">({labels.downloaded})</span>
+                      </>
+                    )}
                   </button>
                 ))}
               </div>

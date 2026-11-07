@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -50,6 +51,9 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           <div className="mx-auto flex max-w-[1080px] flex-col gap-1 px-4 py-8 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <p>{t.footer.built}</p>
             <div className="flex gap-5">
+              <Link href={`/${lang}/privacy`} className="inline-flex min-h-11 items-center hover:text-text hover:underline">
+                {t.footer.privacy}
+              </Link>
               <ExternalLink href={links.repo} newTabLabel={t.nav.newTab} className="inline-flex min-h-11 items-center gap-1 hover:text-text hover:underline">
                 {t.footer.code}
               </ExternalLink>
