@@ -96,8 +96,11 @@ export default async function CvPage({ params }: PageProps<"/[lang]">) {
           <h1 data-reveal className="text-[52px] font-semibold sm:text-[72px] md:text-[88px]">
             Knut Barka
           </h1>
-          <p data-reveal className="mt-4 max-w-[680px] text-[24px] leading-snug text-muted sm:text-[30px]">
-            {t.hero.tagline}
+          <p data-reveal className="mt-4 max-w-[640px] text-[21px] leading-snug sm:text-[26px]">
+            {t.hero.line1}
+          </p>
+          <p data-reveal className="mt-2 max-w-[640px] text-[17px] leading-snug text-muted sm:text-[19px]">
+            {t.hero.line2}
           </p>
           <p data-reveal className="mt-4 flex items-center gap-1.5 text-[15px] text-muted">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

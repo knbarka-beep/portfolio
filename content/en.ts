@@ -17,7 +17,8 @@ export const en: Content = {
     skip: "Skip to content",
   },
   hero: {
-    tagline: "Economics student who builds finance tools with AI.",
+    line1: "MSc student in Economics and Business Administration at SDU, Odense. Graduating summer 2027.",
+    line2: "My CV and three finance tools I have built with AI.",
     location: "Odense, Denmark",
     seeProjects: "See projects",
     fullCv: "Full CV (PDF)",

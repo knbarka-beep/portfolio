@@ -17,7 +17,8 @@ export const da: Content = {
     skip: "Gå til indhold",
   },
   hero: {
-    tagline: "Økonomistuderende, der bygger økonomiværktøjer med AI.",
+    line1: "Kandidatstuderende i Economics and Business Administration på SDU, Odense. Færdig i sommeren 2027.",
+    line2: "Mit CV og tre økonomiværktøjer, som jeg har bygget med AI.",
     location: "Odense, Danmark",
     seeProjects: "Se projekter",
     fullCv: "Fuldt CV (PDF)",

@@ -18,7 +18,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
     (
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "#ffffff", padding: "72px 72px 0" }}>
         <div style={{ fontSize: 88, fontWeight: 700, letterSpacing: -3, color: "#1d1d1f" }}>Knut Barka</div>
-        <div style={{ fontSize: 36, color: "#6e6e73", marginTop: 12 }}>{t.hero.tagline}</div>
+        <div style={{ fontSize: 32, color: "#6e6e73", marginTop: 12, maxWidth: 1000, lineHeight: 1.3 }}>{t.hero.line1}</div>
         <div style={{ display: "flex", gap: 24, marginTop: "auto" }}>
           {shots.map((src) => (
             // eslint-disable-next-line @next/next/no-img-element
