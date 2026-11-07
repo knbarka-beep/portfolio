@@ -12,7 +12,7 @@ export const isLocale = (value: string): value is Locale =>
 export const htmlLang: Record<Locale, string> = { en: "en-GB", da: "da", no: "nb" };
 export const hreflang: Record<Locale, string> = { en: "en", da: "da", no: "nb" };
 
-// Placeholder until the final Vercel address is known (set in Part B). SITE_URL overrides it.
+// The live address, used for metadataBase, og:url, the sitemap and robots.txt. SITE_URL overrides it.
 export const siteUrl = process.env.SITE_URL ?? "https://knutbarka.vercel.app";
 
 export const links = {
