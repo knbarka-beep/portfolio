@@ -152,6 +152,7 @@ try {
     for (const slug of ["", ...Object.keys(live)]) {
       const path = slug ? `/${lang}/projects/${slug}` : `/${lang}`;
       await go(path);
+      const expectNewTab = { en: "(opens in a new tab)", da: "(åbner i en ny fane)", no: "(åpnes i en ny fane)" }[lang];
       const info = await evaluate(`(() => ({
         lang: document.documentElement.lang,
         hreflang: [...document.querySelectorAll('link[rel=alternate][hreflang]')].map((l) => l.hreflang).sort().join(','),
@@ -159,15 +160,14 @@ try {
         title: document.title,
         liveHref: [...document.querySelectorAll('a.pill-accent')].map((a) => a.href)[0] ?? '',
         navLinks: [...document.querySelectorAll('header a')].map((a) => a.getAttribute('href')),
+        // Each link to another site: new tab, safe rel, and the hidden note in the page language in its own text.
         badExternal: [...document.querySelectorAll('a[href^="http"]')]
-          .filter((a) => a.target !== '_blank' || !/noopener/.test(a.rel) || !/noreferrer/.test(a.rel) || !a.querySelector('.sr-only'))
+          .filter((a) => a.target !== '_blank' || !/noopener/.test(a.rel) || !/noreferrer/.test(a.rel) || !a.textContent.includes(${JSON.stringify(expectNewTab)}))
           .map((a) => a.href),
         externalCount: document.querySelectorAll('a[href^="http"]').length,
-        newTabText: document.querySelector('a[href^="http"] .sr-only')?.textContent.trim() ?? '',
         badInternal: [...document.querySelectorAll('a[href^="/"], a[href^="#"]')].filter((a) => a.target).map((a) => a.getAttribute('href')),
       }))()`);
-      const expectNewTab = { en: "(opens in a new tab)", da: "(åbner i en ny fane)", no: "(åpnes i en ny fane)" }[lang];
-      check(`${path} external links open a new tab and say so`, info.externalCount >= 2 && info.badExternal.length === 0 && info.newTabText === expectNewTab, `${info.externalCount} links, "${info.newTabText}" ${info.badExternal.join(" ")}`);
+      check(`${path} external links open a new tab and say so`, info.externalCount >= 2 && info.badExternal.length === 0, `${info.externalCount} links ${info.badExternal.join(" ")}`);
       check(`${path} internal links stay in the same tab`, info.badInternal.length === 0, info.badInternal.join(" "));
       const expectLang = { en: "en-GB", da: "da", no: "nb" }[lang];
       check(`${path} html lang ${expectLang}`, info.lang === expectLang, info.lang);

@@ -43,3 +43,20 @@ Screenshots: `docs/screenshots/live/`.
 | Tab order on the start page | Skip to content > Knut Barka > CV > Variance cockpit > Startup runway > AML queue > EN > DA > NO > theme > See projects > Full CV (PDF) > LinkedIn (opens in a new tab) > hero stack (Variance cockpit, Startup runway, AML queue) > project cards |
 
 Screenshots retaken: `docs/screenshots/{en,da,no}-start-{light,dark,375}.png`, the project pages, and `en-hero-1440x900.png` and `en-hero-375x667.png` for the fold.
+
+## Fix round live check, 07.11.2026, https://knutbarka.vercel.app (run once, 2 minutes after the deploy was ready)
+
+120 of 123. The 3 failures were one check on the three start pages, and the fault was in the check, not the site:
+
+- The check read the first hidden text inside any outside link and expected "(opens in a new tab)".
+- Live, the passcode is set, so the CV dialog shows the code form and has no LinkedIn link. The first hidden text was then the hero LinkedIn icon's name, "LinkedIn".
+- The part that matters passed: no link lacked `target`, `rel` or the note.
+
+Every other live check passed, including:
+
+- Dark theme kept across EN > DA > NO > project > EN, with no light frame.
+- Hero buttons above the fold.
+- External links on the project pages.
+- `/api/cv` "Wrong code" and no public PDF.
+
+Fix: the check now looks for the note inside each outside link's own text. It was not rerun on the live site, since the live check is run once per round. Instead, a local build in the live state (dummy passcode and token, so the dialog shows the form) passed 123 of 123, with 4 outside links on each start page, all correct.
