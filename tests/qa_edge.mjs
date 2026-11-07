@@ -12,8 +12,8 @@ const LIVE = (process.argv[2] ?? "").replace(/\/$/, "");
 const SITE_PORT = 3100, CDP_PORT = 9334, BASE = LIVE || `http://127.0.0.1:${SITE_PORT}`;
 const SHOTS = LIVE ? "docs/screenshots/live" : "docs/screenshots";
 mkdirSync(SHOTS, { recursive: true });
-// QA_ONLY=theme runs only the theme check (quick, for debugging).
-const ONLY_THEME = process.env.QA_ONLY === "theme";
+// QA_ONLY=quick runs only the hero and theme checks (for debugging).
+const ONLY_THEME = process.env.QA_ONLY === "quick";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const server = LIVE ? null : spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "-p", String(SITE_PORT)], { stdio: "ignore" });
@@ -173,6 +173,27 @@ try {
   }
 
   }
+  // Hero: the buttons stay above the fold on a laptop and a small phone; the screenshot stack links to the projects.
+  for (const [w, h] of [[1440, 900], [375, 667]]) {
+    await setViewport(w, h, w < 500);
+    for (const lang of ["en", "da", "no"]) {
+      await go(`/${lang}`);
+      const hero = await evaluate(`(() => {
+        const buttons = [...document.querySelectorAll('main section:first-child .pill')];
+        const shots = [...document.querySelectorAll('.hero-shot')].map((a) => a.getAttribute('href'));
+        return { bottom: Math.max(...buttons.map((b) => b.getBoundingClientRect().bottom)), count: buttons.length, shots, vh: innerHeight };
+      })()`);
+      check(`/${lang} hero buttons above the fold at ${w} x ${h}`, hero.count >= 2 && hero.bottom <= hero.vh, `bottom ${Math.round(hero.bottom)} of ${hero.vh}`);
+      if (w === 1440) check(`/${lang} hero stack links to the three projects`, ["aml-queue", "startup-runway", "variance-cockpit"].every((s) => hero.shots.includes(`/${lang}/projects/${s}`)), hero.shots.join(" "));
+    }
+  }
+  await setViewport(1440);
+  await go("/en");
+  await shot("en-hero-1440x900", false);
+  await setViewport(375, 667, true);
+  await go("/en");
+  await shot("en-hero-375x667", false);
+
   // Theme survives navigation: set dark, then click EN > DA > NO and a project page, like a visitor.
   // A sampler runs on every animation frame (before each paint) from the first moment of every document,
   // so any frame drawn in light mode is caught.

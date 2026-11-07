@@ -198,6 +198,22 @@ p {
   transform: none;
 }
 
+/* Hero screenshots: fade and rise once on load. "backwards" applies the start frame only while waiting,
+   so the hover lift still works after the animation. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+.hero-shot {
+  animation: hero-rise 600ms ease-out backwards;
+  transition: transform 200ms ease-out;
+}
+.hero-shot:hover {
+  transform: translateY(-4px);
+}
+
 /* Native <dialog> for the CV code. */
 dialog.cv-dialog {
   margin: auto;
@@ -231,7 +247,8 @@ dialog.cv-dialog::backdrop {
     opacity: 1;
     transform: none;
   }
-  .card:hover {
+  .card:hover,
+  .hero-shot:hover {
     transform: none;
   }
 }
