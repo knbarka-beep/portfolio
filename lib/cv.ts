@@ -1,0 +1,56 @@
+// The CV passcode check, kept free of Next.js and Blob imports so tests can run it with a fake PDF.
+import { createHash, timingSafeEqual } from "node:crypto";
+
+export type PdfBody = ReadableStream<Uint8Array> | Uint8Array;
+
+type Options = {
+  passcode: string | undefined;
+  readPdf: () => Promise<PdfBody | null>;
+  wrongCodeDelayMs?: number;
+};
+
+const baseHeaders = {
+  "Cache-Control": "private, no-store",
+  "X-Robots-Tag": "noindex, nofollow",
+};
+
+const text = (body: string, status: number) =>
+  new Response(body, { status, headers: { ...baseHeaders, "Content-Type": "text/plain; charset=utf-8" } });
+
+// Hash both sides first, so the compare always runs on two 32-byte values and takes the same time
+// whether the code is right, wrong, short or long.
+export function codesMatch(given: string, expected: string): boolean {
+  const a = createHash("sha256").update(given).digest();
+  const b = createHash("sha256").update(expected).digest();
+  return timingSafeEqual(a, b);
+}
+
+export async function handleCvRequest(request: Request, options: Options): Promise<Response> {
+  const { passcode, readPdf, wrongCodeDelayMs = 1000 } = options;
+  if (!passcode) return text("The full CV is available on request.", 503);
+
+  let code = "";
+  try {
+    const body = (await request.json()) as { code?: unknown };
+    if (typeof body.code === "string" && body.code.length <= 200) code = body.code;
+  } catch {
+    // A body that is not JSON counts as a wrong code.
+  }
+
+  if (!code || !codesMatch(code, passcode)) {
+    await new Promise((resolve) => setTimeout(resolve, wrongCodeDelayMs));
+    return text("Wrong code", 401);
+  }
+
+  const pdf = await readPdf();
+  if (!pdf) return text("The full CV is available on request.", 503);
+
+  return new Response(pdf as BodyInit, {
+    status: 200,
+    headers: {
+      ...baseHeaders,
+      "Content-Type": "application/pdf",
+      "Content-Disposition": 'attachment; filename="Knut-Barka-CV.pdf"',
+    },
+  });
+}
