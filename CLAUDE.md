@@ -13,7 +13,7 @@ Write code, docs and commits in British English. Record every self-made choice i
 - `private/` and every `*.pdf` are gitignored. The CV PDF must never be committed, copied into `public/`, bundled into the build or logged. `tests/pdf.test.mjs` fails if a PDF is tracked or in the build output.
 - No phone number and no email address anywhere on the site or in the repo (the noreply address in git config is the only exception).
 - Ria Financial Services is named only in the CV section (Experience). Never mention Ria, KYC work at Ria or anything from that job on the project pages, least of all near the AML project.
-- Nothing about the master thesis, ECIT or course assignments beyond course names in Education.
+- Nothing about the master thesis or ECIT. Never publish copies of course assignments (files, reports, code or excerpts). Describing them in a CV line in Education, as the CV PDFs do, is fine.
 - Skill levels exactly as on the CV. Never upgrade them.
 - Every number on a project page comes from that project's README, case sheet or docs, and is listed in `docs/numbers.md` with its source. No invented results, users or time saved.
 - Text in all three languages: short sentences, plain words, no em dashes, no hype or filler words (exciting, passionate, innovative, seamless, leverage, robust, cutting-edge, powerful, journey), no rhetorical lists of three, no "I am excited to". English is British English. Numbers and dates European: 1.234,56, 31.12.2026, Sep 2026.

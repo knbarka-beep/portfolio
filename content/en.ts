@@ -51,7 +51,10 @@ export const en: Content = {
         place: "Noroff School of Technology and Digital Media, online",
         title: "One-Year Vocational Degree in Data Analytics (60 ECTS)",
         dates: "Aug 2024 to Jun 2025",
-        points: ["Data-driven decision-making, spreadsheet fundamentals, statistical tools, data visualisation and analysis reporting."],
+        points: [
+          "Data-driven decision-making, spreadsheet fundamentals, statistical tools, data visualisation and analysis reporting.",
+          "Semester and exam projects in data cleaning, regression analysis and reporting.",
+        ],
       },
       {
         place: "University of Stavanger",
@@ -135,9 +138,9 @@ export const en: Content = {
   cvDialog: {
     title: "Full CV (PDF)",
     intro: "Enter the code you received to download the CV.",
-    language: "CV language",
+    choose: "Choose a language. The window stays open, so you can download more than one.",
     label: "Code",
-    submit: "Download",
+    submit: "Continue",
     checking: "Checking…",
     wrong: "Wrong code",
     done: "The download has started.",

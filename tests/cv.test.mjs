@@ -45,6 +45,18 @@ test("lang picks the file; unknown lang gives English; a missing language falls 
   assert.deepEqual(asked, ["no", "en"]);
 });
 
+test("check: true answers 204 on a right code without reading a PDF; wrong code is unchanged", async () => {
+  let reads = 0;
+  const readPdf = async () => (reads++, fakePdf);
+  const ok = await handleCvRequest(post({ code: "fjord-lighthouse-42", check: true }), { ...opts, readPdf });
+  assert.equal(ok.status, 204);
+  assert.equal(ok.headers.get("cache-control"), "private, no-store");
+  assert.equal(reads, 0);
+  const wrong = await handleCvRequest(post({ code: "nope", check: true }), { ...opts, readPdf });
+  assert.equal(wrong.status, 401);
+  assert.equal(await wrong.text(), "Wrong code");
+});
+
 test("wrong, empty, too long or broken input gives 'Wrong code' after the delay", async () => {
   for (const body of [{ code: "fjord-lighthouse-41" }, { code: "" }, {}, { code: "x".repeat(500) }, "not json", { code: 42 }]) {
     const t0 = Date.now();

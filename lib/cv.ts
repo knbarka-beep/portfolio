@@ -36,10 +36,12 @@ export async function handleCvRequest(request: Request, options: Options): Promi
 
   let code = "";
   let lang: CvLang = "en";
+  let checkOnly = false;
   try {
-    const body = (await request.json()) as { code?: unknown; lang?: unknown };
+    const body = (await request.json()) as { code?: unknown; lang?: unknown; check?: unknown };
     if (typeof body.code === "string" && body.code.length <= 200) code = body.code;
     lang = toCvLang(body.lang);
+    checkOnly = body.check === true;
   } catch {
     // A body that is not JSON counts as a wrong code.
   }
@@ -48,6 +50,9 @@ export async function handleCvRequest(request: Request, options: Options): Promi
     await new Promise((resolve) => setTimeout(resolve, wrongCodeDelayMs));
     return text("Wrong code", 401);
   }
+
+  // The dialog first checks the code alone, then shows one download button per language.
+  if (checkOnly) return new Response(null, { status: 204, headers: baseHeaders });
 
   // If the chosen language is missing, serve the English CV.
   let pdf = await readPdf(lang);

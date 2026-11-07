@@ -18,9 +18,11 @@ Light is the default. On the first visit the site follows the computer's setting
 
 - The PDF is stored in a private Vercel Blob store. A private store has no public address: only the server, with a secret token, can read it.
 - The passcode is an environment variable, `CV_PASSCODE`, set in Vercel. It is not in the code, not sent to the browser and never written to a log. Knut sets it himself.
-- The CV exists in English, Danish and Norwegian. "Full CV (PDF)" opens a small window with a language choice (English, Dansk, Norsk, starting on the language of the page) and one field for the code. The browser sends the code and the language to `/api/cv`.
+- The CV exists in English, Danish and Norwegian. "Full CV (PDF)" opens a small window with one field for the code. The browser sends the code to `/api/cv`, which only checks it.
+- Right code: the window shows three buttons, English, Dansk and Norsk, with the page's language first. Each button asks `/api/cv` again, with the code and that language, and downloads the file. The window stays open, so a visitor can take one, two or all three.
+- The code is kept only in the page's memory while the window is open. Closing the window forgets it. Nothing is stored in the browser and there is no cookie.
 - The server compares the code with `CV_PASSCODE`. It turns both into a fixed-length fingerprint (SHA-256) and compares those in constant time, so the time it takes does not reveal how many characters were right.
-- Right code: the server reads that language's PDF from Blob (`cv/Knut-Barka-CV-EN.pdf`, `-DA.pdf` or `-NO.pdf`) and sends it as a download with the same name, marked so browsers and proxies do not keep a copy (`Cache-Control: private, no-store`).
+- For each download the server checks the code again, reads that language's PDF from Blob (`cv/Knut-Barka-CV-EN.pdf`, `-DA.pdf` or `-NO.pdf`) and sends it as a download with the same name, marked so browsers and proxies do not keep a copy (`Cache-Control: private, no-store`).
 - Wrong code: the server waits about one second and answers "Wrong code". No hint. The wait makes guessing slow.
 - No cookie: the code is asked for every time. That keeps the site free of cookies and banners.
 - If the passcode or the Blob store is missing, the button still shows, and the window says "The full CV is available on request" with a link to LinkedIn. The build does not fail.

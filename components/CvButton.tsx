@@ -1,16 +1,16 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { Content } from "@/content/types";
 import type { Locale } from "@/lib/site";
 import { ExternalLink } from "./ExternalLink";
 
 // The CV comes in three languages. Names stay in their own language, like a language menu.
-const cvLangs = [
-  { value: "en", name: "English" },
-  { value: "da", name: "Dansk" },
-  { value: "no", name: "Norsk" },
-] as const;
+const cvLangs: { value: Locale; name: string; htmlLang: string }[] = [
+  { value: "en", name: "English", htmlLang: "en" },
+  { value: "da", name: "Dansk", htmlLang: "da" },
+  { value: "no", name: "Norsk", htmlLang: "nb" },
+];
 
 type Props = {
   lang: Locale;
@@ -22,14 +22,32 @@ type Props = {
   variant?: "primary" | "outline";
 };
 
-type Status = "idle" | "checking" | "wrong" | "done" | "error" | "unavailable";
+// idle/checking/wrong/error: the code form. ready/downloading/done/failed: the download buttons.
+type Status = "idle" | "checking" | "wrong" | "error" | "ready" | "downloading" | "done" | "failed" | "unavailable";
+
+const post = (body: object) =>
+  fetch("/api/cv", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 
 export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTabLabel, variant = "outline" }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const firstDownloadRef = useRef<HTMLButtonElement>(null);
+  // The code lives only here, in memory, while the dialog is open. No cookie, no storage.
+  const codeRef = useRef("");
   const id = useId();
   const [status, setStatus] = useState<Status>(available ? "idle" : "unavailable");
+  const unlocked = status === "ready" || status === "downloading" || status === "done" || status === "failed";
+  // The current page's language first, then the other two.
+  const ordered = [...cvLangs].sort((a, b) => Number(b.value === lang) - Number(a.value === lang));
+
+  // Once the code is accepted, move focus from the vanished field to the first download button.
+  const wasUnlocked = useRef(false);
+  useEffect(() => {
+    if (unlocked && !wasUnlocked.current) firstDownloadRef.current?.focus();
+    wasUnlocked.current = unlocked;
+  }, [unlocked]);
 
   const open = () => {
+    codeRef.current = "";
     if (status !== "unavailable") setStatus("idle");
     dialogRef.current?.showModal();
     dialogRef.current?.querySelector<HTMLInputElement>("input[name=code]")?.focus();
@@ -38,18 +56,30 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
+    const code = new FormData(event.currentTarget).get("code");
     setStatus("checking");
     try {
-      const res = await fetch("/api/cv", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: data.get("code"), lang: data.get("lang") }),
-      });
+      const res = await post({ code, check: true });
       if (res.status === 401) return setStatus("wrong");
       if (res.status === 503) return setStatus("unavailable");
       if (!res.ok) return setStatus("error");
+      codeRef.current = String(code);
+      setStatus("ready");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  async function download(cvLang: Locale) {
+    setStatus("downloading");
+    try {
+      const res = await post({ code: codeRef.current, lang: cvLang });
+      if (res.status === 401) {
+        codeRef.current = "";
+        return setStatus("wrong");
+      }
+      if (res.status === 503) return setStatus("unavailable");
+      if (!res.ok) return setStatus("failed");
       const url = URL.createObjectURL(await res.blob());
       const a = document.createElement("a");
       a.href = url;
@@ -57,15 +87,19 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
       a.download = res.headers.get("content-disposition")?.match(/filename="(.+)"/)?.[1] ?? "Knut-Barka-CV.pdf";
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
-      form.reset();
       setStatus("done");
     } catch {
-      setStatus("error");
+      setStatus("failed");
     }
   }
 
   const message =
-    status === "wrong" ? labels.wrong : status === "done" ? labels.done : status === "error" ? labels.error : "";
+    status === "wrong" ? labels.wrong : status === "done" ? labels.done : status === "error" || status === "failed" ? labels.error : "";
+  const statusLine = (
+    <p id={`${id}-status`} role="status" className={`mt-2 min-h-6 text-[15px] ${status === "done" ? "text-muted" : "text-[#c62828] dark:text-[#ff6b6b]"}`}>
+      {message}
+    </p>
+  );
 
   return (
     <>
@@ -73,7 +107,16 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
         {buttonLabel}
       </button>
 
-      <dialog ref={dialogRef} className="cv-dialog" aria-labelledby={`${id}-title`} onClick={(e) => e.target === e.currentTarget && close()}>
+      <dialog
+        ref={dialogRef}
+        className="cv-dialog"
+        aria-labelledby={`${id}-title`}
+        onClick={(e) => e.target === e.currentTarget && close()}
+        onClose={() => {
+          codeRef.current = "";
+          if (status !== "unavailable") setStatus("idle");
+        }}
+      >
         <div className="p-6 sm:p-7">
           <div className="flex items-start justify-between gap-4">
             <h2 id={`${id}-title`} className="text-[24px] font-semibold">
@@ -98,23 +141,31 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
                 LinkedIn
               </ExternalLink>
             </p>
+          ) : unlocked ? (
+            <div className="mt-3">
+              <p id={`${id}-choose`} className="text-muted">
+                {labels.choose}
+              </p>
+              <div role="group" aria-labelledby={`${id}-choose`} className="mt-5 grid gap-2">
+                {ordered.map((option, i) => (
+                  <button
+                    key={option.value}
+                    ref={i === 0 ? firstDownloadRef : undefined}
+                    type="button"
+                    onClick={() => download(option.value)}
+                    disabled={status === "downloading"}
+                    aria-describedby={`${id}-status`}
+                    className={`pill ${i === 0 ? "pill-primary" : "pill-outline"} w-full disabled:opacity-60`}
+                  >
+                    <span lang={option.htmlLang}>{option.name}</span>
+                  </button>
+                ))}
+              </div>
+              {statusLine}
+            </div>
           ) : (
             <form onSubmit={submit} className="mt-3">
               <p className="text-muted">{labels.intro}</p>
-              <fieldset className="mt-5">
-                <legend className="text-[14px] font-medium">{labels.language}</legend>
-                <div className="mt-1.5 grid grid-cols-3 gap-1 rounded-xl border border-line bg-bg p-1">
-                  {cvLangs.map((option) => (
-                    <label
-                      key={option.value}
-                      className="flex h-10 cursor-pointer items-center justify-center rounded-lg text-[15px] text-muted hover:text-text has-[:checked]:bg-btn has-[:checked]:text-on-btn has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-current"
-                    >
-                      <input type="radio" name="lang" value={option.value} defaultChecked={option.value === lang} className="sr-only" />
-                      <span lang={option.value === "no" ? "nb" : option.value}>{option.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
               <label htmlFor={`${id}-code`} className="mt-5 block text-[14px] font-medium">
                 {labels.label}
               </label>
@@ -128,9 +179,7 @@ export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTa
                 aria-describedby={`${id}-status`}
                 className="mt-1.5 block h-12 w-full rounded-xl border border-line bg-bg px-4 text-[17px] text-text"
               />
-              <p id={`${id}-status`} role="status" className={`mt-2 min-h-6 text-[15px] ${status === "done" ? "text-muted" : "text-[#c62828] dark:text-[#ff6b6b]"}`}>
-                {message}
-              </p>
+              {statusLine}
               <button type="submit" disabled={status === "checking"} className="pill pill-primary mt-2 w-full disabled:opacity-60">
                 {status === "checking" ? labels.checking : labels.submit}
               </button>

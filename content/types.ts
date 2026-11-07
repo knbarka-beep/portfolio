@@ -35,7 +35,7 @@ export type Content = {
   cvDialog: {
     title: string;
     intro: string;
-    language: string;
+    choose: string;
     label: string;
     submit: string;
     checking: string;

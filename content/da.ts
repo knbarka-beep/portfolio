@@ -51,7 +51,10 @@ export const da: Content = {
         place: "Noroff School of Technology and Digital Media, online",
         title: "Etårig uddannelse i dataanalyse (60 ECTS)",
         dates: "aug. 2024 til jun. 2025",
-        points: ["Datadrevet beslutningstagning, regneark, statistiske værktøjer, datavisualisering og rapportering af analyser."],
+        points: [
+          "Datadrevet beslutningstagning, regneark, statistiske værktøjer, datavisualisering og rapportering af analyser.",
+          "Semester- og eksamensprojekter i datarensning, regressionsanalyse og rapportering.",
+        ],
       },
       {
         place: "Universitetet i Stavanger",
@@ -135,9 +138,9 @@ export const da: Content = {
   cvDialog: {
     title: "Fuldt CV (PDF)",
     intro: "Skriv den kode, du har fået, for at hente CV'et.",
-    language: "Sprog på CV'et",
+    choose: "Vælg et sprog. Vinduet bliver åbent, så du kan hente mere end ét.",
     label: "Kode",
-    submit: "Hent",
+    submit: "Fortsæt",
     checking: "Kontrollerer…",
     wrong: "Forkert kode",
     done: "Downloaden er startet.",
