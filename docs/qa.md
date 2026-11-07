@@ -16,3 +16,16 @@
 Screenshots: `docs/screenshots/`, `{en,da,no}-{start,variance-cockpit}-{light,dark,375}.png`, plus `en-focus-ring.png`, `en-cv-dialog.png` (shows the "on request" state, since no passcode is set locally) and `404.png`.
 
 Not checked in Part A: the right passcode against the real Blob store (Knut does that in Part B), and the live site.
+
+## Part B live check, 07.11.2026, https://knutbarka.vercel.app (run once)
+
+85 of 85 checks pass with `node tests/qa_edge.mjs https://knutbarka.vercel.app`:
+
+- `/` redirects (307) to /en, /da or /no by browser language; other languages go to /en.
+- All three languages load, with the right html lang and hreflang tags on all 12 pages.
+- The nav reaches all three project pages. "Open live dashboard" points to variance-cockpit.vercel.app, nordlys-runway.vercel.app and lysbro-aml.vercel.app (hrefs checked, the dashboards were not visited).
+- `/api/cv` with a wrong code: 401 "Wrong code" after about 1 s, with a noindex header. The right code was not tested; Knut does that in his browser.
+- No PDF at /cv.pdf, /Knut-Barka-CV.pdf, /private/cv.pdf, /cv/Knut-Barka-CV.pdf or GET /api/cv. The Blob URL itself returns 403 without a token.
+- No horizontal scroll at 375 px; Open Graph images return 200 on all 12 pages; keyboard, focus ring and dialog checks pass; no console errors.
+
+Screenshots: `docs/screenshots/live/`.
