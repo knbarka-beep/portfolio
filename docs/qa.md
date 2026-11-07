@@ -29,3 +29,17 @@ Not checked in Part A: the right passcode against the real Blob store (Knut does
 - No horizontal scroll at 375 px; Open Graph images return 200 on all 12 pages; keyboard, focus ring and dialog checks pass; no console errors.
 
 Screenshots: `docs/screenshots/live/`.
+
+## Fix round, 07.11.2026 (local production build)
+
+| Check | Result |
+|---|---|
+| `npm run lint`, `npm run typecheck`, `npm run build` | Clean |
+| `npm test` | 21 of 21 pass |
+| `npm run qa` (headless Edge) | 123 of 123 pass on two runs in a row. One earlier run had 122 of 123: a single console error with no message ("Uncaught"). It did not come back in two full runs or three hero and theme runs, so the source is unknown. The QA now logs the full error text, so a repeat will name it. |
+| New: theme across navigation | Set dark, then click EN > DA > NO > a project page > EN: dark after every switch. No light frame in 165 samples (every animation frame plus every change to `<html>`). Before the fix the same check failed: theme lost on every switch, light frames drawn. |
+| New: hero | The buttons stay above the fold at 1440 x 900 (bottom at 521 px) and 375 x 667 (bottom at 451 to 479 px) in all three languages. The screenshot stack links to all three project pages. |
+| New: external links | On all 12 pages every link to another site has `target="_blank"`, `rel="noopener noreferrer"` and the hidden "(opens in a new tab)" text in the page language. No internal link opens a new tab. |
+| Tab order on the start page | Skip to content > Knut Barka > CV > Variance cockpit > Startup runway > AML queue > EN > DA > NO > theme > See projects > Full CV (PDF) > LinkedIn (opens in a new tab) > hero stack (Variance cockpit, Startup runway, AML queue) > project cards |
+
+Screenshots retaken: `docs/screenshots/{en,da,no}-start-{light,dark,375}.png`, the project pages, and `en-hero-1440x900.png` and `en-hero-375x667.png` for the fold.

@@ -51,7 +51,7 @@ async function connect() {
             if (msg.error) p.reject(new Error(msg.error.message));
             else p.resolve(msg.result);
           } else if (msg.method === "Runtime.exceptionThrown") {
-            consoleErrors.push(msg.params.exceptionDetails.text);
+            consoleErrors.push(`${msg.params.exceptionDetails.text} ${msg.params.exceptionDetails.exception?.description ?? ""} @ ${msg.params.exceptionDetails.url ?? ""}`.trim());
           } else if (msg.method === "Runtime.consoleAPICalled" && msg.params.type === "error") {
             consoleErrors.push(msg.params.args.map((a) => a.value ?? a.description).join(" "));
           } else if (msg.method === "Log.entryAdded" && msg.params.entry.level === "error") {
@@ -305,6 +305,7 @@ try {
   if (server) spawn("taskkill", ["/pid", String(server.pid), "/T", "/F"], { stdio: "ignore" });
   await sleep(500);
   try { rmSync(profile, { recursive: true, force: true }); } catch {}
+  if (ONLY_THEME && consoleErrors.length) console.log("Console errors:", consoleErrors.slice(0, 5));
   const failed = results.filter((r) => !r.ok);
   console.log(`\n${results.length - failed.length} of ${results.length} checks passed.`);
   process.exit(failed.length ? 1 : 0);
