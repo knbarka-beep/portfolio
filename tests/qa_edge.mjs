@@ -12,6 +12,8 @@ const LIVE = (process.argv[2] ?? "").replace(/\/$/, "");
 const SITE_PORT = 3100, CDP_PORT = 9334, BASE = LIVE || `http://127.0.0.1:${SITE_PORT}`;
 const SHOTS = LIVE ? "docs/screenshots/live" : "docs/screenshots";
 mkdirSync(SHOTS, { recursive: true });
+// QA_ONLY=theme runs only the theme check (quick, for debugging).
+const ONLY_THEME = process.env.QA_ONLY === "theme";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const server = LIVE ? null : spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "-p", String(SITE_PORT)], { stdio: "ignore" });
@@ -115,6 +117,7 @@ try {
   await send("Runtime.enable");
   await send("Log.enable");
 
+  if (!ONLY_THEME) {
   // Redirect from / follows the browser language.
   for (const [accept, expected] of [["en-GB,en;q=0.9", "/en"], ["da-DK,da;q=0.9", "/da"], ["nb-NO,nb;q=0.9", "/no"], ["de-DE", "/en"]]) {
     const res = await fetch(BASE + "/", { redirect: "manual", headers: { "accept-language": accept } });
@@ -169,6 +172,49 @@ try {
     }
   }
 
+  }
+  // Theme survives navigation: set dark, then click EN > DA > NO and a project page, like a visitor.
+  // A sampler runs on every animation frame (before each paint) from the first moment of every document,
+  // so any frame drawn in light mode is caught.
+  await setSystemDark(false);
+  await setViewport(1440);
+  await send("Page.addScriptToEvaluateOnNewDocument", {
+    // Two samplers: every animation frame, and the settled value after every change to <html>
+    // (read when the observer fires, after the current task, so before the browser can paint).
+    source: `window.__themeFrames = [];
+      const sample = () => { if (document.body) window.__themeFrames.push(document.documentElement.dataset.theme || 'none'); };
+      (function loop(){ sample(); requestAnimationFrame(loop); })();
+      new MutationObserver(sample).observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ['data-theme'] });`,
+  });
+  await send("Emulation.setFocusEmulationEnabled", { enabled: true });
+  await send("Page.bringToFront");
+  await go("/en");
+  await setTheme("dark");
+  await evaluate("window.__themeFrames = []");
+  const lightFrames = [];
+  let samples = 0;
+  for (const [label, selector, expected] of [
+    ["DA", 'header a[href="/da"]', "/da"],
+    ["NO", 'header a[href="/no"]', "/no"],
+    ["project", 'header a[href="/no/projects/aml-queue"]', "/no/projects/aml-queue"],
+    ["EN", 'header a[href="/en/projects/aml-queue"]', "/en/projects/aml-queue"],
+  ]) {
+    await evaluate(`document.querySelector('${selector}').click()`);
+    for (let i = 0; i < 40; i++) {
+      await sleep(150);
+      if ((await evaluate("location.pathname")) === expected && (await evaluate("document.readyState")) === "complete") break;
+    }
+    await sleep(500);
+    const state = await evaluate("({ theme: document.documentElement.dataset.theme, frames: window.__themeFrames || [], path: location.pathname })");
+    lightFrames.push(...state.frames.filter((f) => f !== "dark").map((f) => `${label}:${f}`));
+    samples += state.frames.length;
+    check(`Dark theme kept after switching to ${label}`, state.theme === "dark" && state.path === expected, `${state.path} ${state.theme}`);
+    await evaluate("window.__themeFrames = []");
+  }
+  check("No light frame during any of those switches", samples > 0 && lightFrames.length === 0, `${samples} samples ${lightFrames.slice(0, 5).join(", ")}`);
+  await setTheme("light");
+
+  if (!ONLY_THEME) {
   // Keyboard: Tab order on the start page, visible focus ring, dialog focus trap and Esc.
   await go("/en");
   const tabOrder = [];
@@ -220,6 +266,7 @@ try {
   // Console errors from the site's own scripts.
   const own = consoleErrors.filter((e) => !/favicon|chrome-extension/i.test(e) && !/status of 40[14]/.test(e));
   check("No console errors", own.length === 0, own.slice(0, 3).join(" | "));
+  }
 } catch (error) {
   check("QA run", false, error.message);
 } finally {

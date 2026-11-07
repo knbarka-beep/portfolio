@@ -1,8 +1,37 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
+import { useLayoutEffect, useSyncExternalStore } from "react";
 
 type Labels = { themeLight: string; themeDark: string };
+
+// The saved choice, or the system setting if there is none. Storage can be blocked, hence try/catch.
+function preferredTheme(): "light" | "dark" {
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem("theme");
+  } catch {}
+  if (saved === "light" || saved === "dark") return saved;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+// Runs in <head> before the first paint of every page load, so the theme never flickers.
+// Same logic as preferredTheme(), written out because it must run before any JavaScript bundle loads.
+export const themeScript = `(function(){var d=document.documentElement;d.classList.add('js');var t=null;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t})();`;
+
+// Each language has its own root layout. When Next.js swaps root layouts on a client-side navigation
+// (for example EN to DA), React resets the attributes on <html>, which dropped the theme.
+// This puts it back after every navigation, before the browser paints (useLayoutEffect).
+export function ThemeSync() {
+  const pathname = usePathname();
+  useLayoutEffect(() => {
+    const html = document.documentElement;
+    html.classList.add("js");
+    const theme = preferredTheme();
+    if (html.dataset.theme !== theme) html.dataset.theme = theme;
+  }, [pathname]);
+  return null;
+}
 
 const subscribe = (onChange: () => void) => {
   const observer = new MutationObserver(onChange);
@@ -20,7 +49,7 @@ export function ThemeToggle({ labels }: { labels: Labels }) {
     try {
       localStorage.setItem("theme", next);
     } catch {
-      // Storage can be blocked; the choice then lasts for this page only.
+      // Storage can be blocked; the choice then lasts until the next page load.
     }
   };
 
@@ -44,6 +73,3 @@ export function ThemeToggle({ labels }: { labels: Labels }) {
     </button>
   );
 }
-
-// Runs in <head> before the page paints, so the theme never flickers.
-export const themeScript = `(function(){var d=document.documentElement;d.classList.add('js');var t=null;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t})();`;

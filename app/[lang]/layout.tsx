@@ -5,7 +5,7 @@ import "../globals.css";
 import { getContent } from "@/content";
 import { Nav } from "@/components/Nav";
 import { RevealObserver } from "@/components/Reveal";
-import { themeScript } from "@/components/ThemeToggle";
+import { ThemeSync, themeScript } from "@/components/ThemeToggle";
 import { htmlLang, isLocale, links, locales, siteUrl } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -36,6 +36,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <ThemeSync />
         <a
           href="#main"
           className="sr-only z-50 rounded-full bg-btn px-4 py-2 text-on-btn focus:not-sr-only focus:fixed focus:left-4 focus:top-2"
