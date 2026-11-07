@@ -22,7 +22,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
         <div style={{ display: "flex", gap: 24, marginTop: "auto" }}>
           {shots.map((src) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={src.slice(-32)} src={src} width={336} height={210} alt="" style={{ borderRadius: "12px 12px 0 0", border: "1px solid #d2d2d7", borderBottom: "none" }} />
+            <img key={src.slice(-32)} src={src} width={336} height={210} alt="" style={{ flexShrink: 0, borderRadius: "12px 12px 0 0", border: "1px solid #d2d2d7", borderBottom: "none" }} />
           ))}
         </div>
       </div>

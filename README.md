@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Knut Barka: portfolio
 
-## Getting Started
+A web CV and three finance projects in one site, in English, Danish and Norwegian.
 
-First, run the development server:
+- Start page: the CV, with the three projects right under the name.
+- Project pages: [Variance cockpit](https://github.com/knbarka-beep/variance-cockpit), [Startup runway](https://github.com/knbarka-beep/startup-runway) and [AML queue](https://github.com/knbarka-beep/aml-queue). What each dashboard shows, the key findings, how the AI part was checked and what it does not do.
+- The full CV as a PDF is behind a passcode that Knut sends to employers. The public pages hold no phone number or email address.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## How it is built
+
+Next.js with Tailwind and TypeScript, hosted on Vercel. Every page is static HTML built once. All text lives in `content/en.ts`, `content/da.ts` and `content/no.ts`, which share one type. The only server code is `/api/cv`, which checks the passcode and streams the PDF from a private Vercel Blob store. No database, no analytics, no cookies.
+
+How it works in plain words: [docs/explain.md](docs/explain.md). Every choice made during the build: [docs/decisions.md](docs/decisions.md). Where each project number comes from: [docs/numbers.md](docs/numbers.md).
+
+## Run it
+
+```
+npm install
+npm run dev          # http://localhost:3000
+npm run lint
+npm run typecheck
+npm run build
+npm test             # after build: PDF, privacy, text and number checks
+npm run qa           # after build: headless Edge, screenshots to docs/screenshots/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To try the CV download locally, run `next dev` with `CV_PASSCODE` and `CV_DEV_FILE` (a path to any test PDF) set. In production the PDF comes from Vercel Blob (`BLOB_READ_WRITE_TOKEN`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with Claude Code by Knut Barka. [LinkedIn](https://www.linkedin.com/in/knutbarka)

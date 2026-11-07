@@ -46,7 +46,8 @@ async function connect() {
           if (msg.id && pending.has(msg.id)) {
             const p = pending.get(msg.id);
             pending.delete(msg.id);
-            msg.error ? p.reject(new Error(msg.error.message)) : p.resolve(msg.result);
+            if (msg.error) p.reject(new Error(msg.error.message));
+            else p.resolve(msg.result);
           } else if (msg.method === "Runtime.exceptionThrown") {
             consoleErrors.push(msg.params.exceptionDetails.text);
           } else if (msg.method === "Runtime.consoleAPICalled" && msg.params.type === "error") {

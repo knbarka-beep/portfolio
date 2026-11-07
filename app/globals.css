@@ -74,7 +74,6 @@ body {
   font-family: var(--font-sans);
   font-size: 17px;
   line-height: 1.53;
-  font-feature-settings: "tnum" 1;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }

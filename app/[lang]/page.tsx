@@ -53,7 +53,7 @@ function Timeline({ items }: { items: TimelineItem[] }) {
       {items.map((item) => (
         <li key={item.place + item.dates} className="relative pb-10 pl-6 last:pb-0">
           <span className="absolute -left-[5px] top-[9px] h-[9px] w-[9px] rounded-full bg-text" aria-hidden="true" />
-          <p className="text-[14px] text-muted">{item.dates}</p>
+          <p className="text-[14px] text-muted tabular-nums">{item.dates}</p>
           <h3 className="mt-1 text-[21px] font-semibold leading-snug">{item.title}</h3>
           <p className="mt-0.5 text-muted">{item.place}</p>
           {item.points.length > 0 && (
@@ -143,7 +143,7 @@ export default async function CvPage({ params }: PageProps<"/[lang]">) {
                       <p className="mt-1 text-[14px] text-muted">
                         {t.projectStrip.forWhom}: {p.forWhom}
                       </p>
-                      <p className="mt-3 text-[15px]">{p.cardFinding}</p>
+                      <p className="mt-3 text-[15px] tabular-nums">{p.cardFinding}</p>
                     </div>
                   </Link>
                 </li>

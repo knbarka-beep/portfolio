@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { en } from "@/content/en";
@@ -19,9 +20,9 @@ export default function GlobalNotFound() {
       <body>
         <header className="border-b border-line/60">
           <div className="mx-auto flex h-12 max-w-[1080px] items-center px-4 sm:px-6">
-            <a href="/en" className="inline-flex min-h-11 items-center text-[15px] font-semibold tracking-tight">
+            <Link href="/en" className="inline-flex min-h-11 items-center text-[15px] font-semibold tracking-tight">
               Knut Barka
-            </a>
+            </Link>
           </div>
         </header>
         <main id="main">
