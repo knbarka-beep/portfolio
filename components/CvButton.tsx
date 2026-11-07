@@ -2,18 +2,20 @@
 
 import { useId, useRef, useState } from "react";
 import type { Content } from "@/content/types";
+import { ExternalLink } from "./ExternalLink";
 
 type Props = {
   labels: Content["cvDialog"];
   buttonLabel: string;
   available: boolean;
   linkedin: string;
+  newTabLabel: string;
   variant?: "primary" | "outline";
 };
 
 type Status = "idle" | "checking" | "wrong" | "done" | "error" | "unavailable";
 
-export function CvButton({ labels, buttonLabel, available, linkedin, variant = "outline" }: Props) {
+export function CvButton({ labels, buttonLabel, available, linkedin, newTabLabel, variant = "outline" }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const id = useId();
   const [status, setStatus] = useState<Status>(available ? "idle" : "unavailable");
@@ -82,9 +84,9 @@ export function CvButton({ labels, buttonLabel, available, linkedin, variant = "
           {status === "unavailable" ? (
             <p className="mt-3 text-muted">
               {labels.unavailable}{" "}
-              <a href={linkedin} className="text-link hover:underline" rel="noopener">
+              <ExternalLink href={linkedin} newTabLabel={newTabLabel} className="inline-flex items-center gap-1 text-link hover:underline">
                 LinkedIn
-              </a>
+              </ExternalLink>
             </p>
           ) : (
             <form onSubmit={submit} className="mt-3">

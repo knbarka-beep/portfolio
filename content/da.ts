@@ -15,6 +15,7 @@ export const da: Content = {
     themeLight: "Skift til lyst tema",
     themeDark: "Skift til mørkt tema",
     skip: "Gå til indhold",
+    newTab: "(åbner i en ny fane)",
   },
   hero: {
     line1: "Kandidatstuderende i Economics and Business Administration på SDU, Odense. Færdig i sommeren 2027.",

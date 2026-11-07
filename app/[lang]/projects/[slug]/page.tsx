@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getContent } from "@/content";
+import { ExternalLink } from "@/components/ExternalLink";
 import { Shot } from "@/components/Shot";
 import { alternates, ogLocale } from "@/lib/meta";
 import { isLocale, isProjectSlug, projects, projectSlugs, type Locale, type ProjectSlug } from "@/lib/site";
@@ -86,15 +87,15 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/project
           {t.project.englishNote && ` ${t.project.englishNote}`}
         </p>
         <div data-reveal className="mt-8 flex flex-wrap items-center gap-3">
-          <a href={meta.live} rel="noopener" className="pill pill-accent">
+          <ExternalLink href={meta.live} newTabLabel={t.nav.newTab} className="pill pill-accent">
             {t.project.openLive}
-          </a>
-          <a href={meta.repo} rel="noopener" className="pill pill-outline">
+          </ExternalLink>
+          <ExternalLink href={meta.repo} newTabLabel={t.nav.newTab} className="pill pill-outline">
             {t.project.viewCode}
-          </a>
-          <a href={meta.caseSheet} rel="noopener" className="chevron-link ml-1">
+          </ExternalLink>
+          <ExternalLink href={meta.caseSheet} newTabLabel={t.nav.newTab} className="chevron-link is-external ml-1">
             {t.project.caseSheet}
-          </a>
+          </ExternalLink>
         </div>
       </header>
 

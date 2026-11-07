@@ -22,7 +22,7 @@ export type ProjectContent = {
 
 export type Content = {
   meta: { title: string; description: string; projectTitleSuffix: string };
-  nav: { cv: string; menu: string; close: string; language: string; themeLight: string; themeDark: string; skip: string };
+  nav: { cv: string; menu: string; close: string; language: string; themeLight: string; themeDark: string; skip: string; newTab: string };
   hero: { line1: string; line2: string; location: string; seeProjects: string; fullCv: string; linkedin: string };
   projectStrip: { heading: string; forWhom: string };
   profile: { heading: string; text: string[] };

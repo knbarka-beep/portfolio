@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { getContent } from "@/content";
+import { ExternalLink } from "@/components/ExternalLink";
 import { Nav } from "@/components/Nav";
 import { RevealObserver } from "@/components/Reveal";
 import { ThemeSync, themeScript } from "@/components/ThemeToggle";
@@ -49,12 +50,12 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
           <div className="mx-auto flex max-w-[1080px] flex-col gap-1 px-4 py-8 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <p>{t.footer.built}</p>
             <div className="flex gap-5">
-              <a href={links.repo} className="inline-flex min-h-11 items-center hover:text-text hover:underline" rel="noopener">
+              <ExternalLink href={links.repo} newTabLabel={t.nav.newTab} className="inline-flex min-h-11 items-center gap-1 hover:text-text hover:underline">
                 {t.footer.code}
-              </a>
-              <a href={links.linkedin} className="inline-flex min-h-11 items-center hover:text-text hover:underline" rel="noopener">
+              </ExternalLink>
+              <ExternalLink href={links.linkedin} newTabLabel={t.nav.newTab} className="inline-flex min-h-11 items-center gap-1 hover:text-text hover:underline">
                 LinkedIn
-              </a>
+              </ExternalLink>
             </div>
           </div>
         </footer>

@@ -15,6 +15,7 @@ export const en: Content = {
     themeLight: "Switch to light theme",
     themeDark: "Switch to dark theme",
     skip: "Skip to content",
+    newTab: "(opens in a new tab)",
   },
   hero: {
     line1: "MSc student in Economics and Business Administration at SDU, Odense. Graduating summer 2027.",
