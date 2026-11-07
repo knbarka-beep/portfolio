@@ -5,3 +5,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      # react and react-dom must have the same version, or npm install fails. Update them in one pull request.
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
