@@ -32,7 +32,7 @@ export const en: Content = {
   profile: {
     heading: "Profile",
     text: [
-      "I am an MSc student in Economics and Business Administration at SDU, graduating in summer 2027, with a bachelor in economics and a one-year degree in data analytics. My base is accounting, management control and corporate finance, and I use AI every day to build finance tools. I am looking for a student job or part-time role now, and a graduate role from summer 2027, in finance transformation, controlling, startup finance or compliance.",
+      "MSc student in Economics and Business Administration (International Business and Management) graduating summer 2027, with a bachelor in economics and business administration and a year of data analytics. Builds finance tools with AI. Background in accounting, management control and corporate finance, advanced Excel, and hands-on reconciliation and KYC/AML work in a regulated financial services group. Looking to start in finance transformation, where finance processes, data and technology meet.",
     ],
   },
   education: {
@@ -43,15 +43,15 @@ export const en: Content = {
         title: "MSc in Economics and Business Administration, International Business and Management",
         dates: "Sep 2025 to Jun 2027 (expected)",
         points: [
-          "Core courses: International Business Strategy, International Market Analytics, International Strategic Partnerships, Leading Across International Cultures and Markets.",
-          "Autumn 2026: Data Analytics in Accounting (Excel, SQL, Power BI) and AI in Accounting and Business.",
+          "Core courses: International Business Strategy, International Market Analytics (survey design and statistical modelling), International Strategic Partnerships, Leading Across International Cultures and Markets.",
+          "Autumn 2026: Data Analytics in Accounting (Excel, SQL, Power BI) and AI in Accounting and Business, both focused on how data and automation change the finance function.",
         ],
       },
       {
         place: "Noroff School of Technology and Digital Media, online",
         title: "One-Year Vocational Degree in Data Analytics (60 ECTS)",
         dates: "Aug 2024 to Jun 2025",
-        points: ["Data-driven decision-making, statistical tools, data visualisation and reporting."],
+        points: ["Data-driven decision-making, spreadsheet fundamentals, statistical tools, data visualisation and analysis reporting."],
       },
       {
         place: "University of Stavanger",
@@ -72,28 +72,28 @@ export const en: Content = {
         title: "Cashier (part-time)",
         dates: "Apr 2026 to present",
         points: [
-          "Reconcile cash and currency holdings against system records at every close, and trace and document differences.",
-          "Verify customer identity and complete KYC and AML documentation before transactions are released.",
-          "Handle confidential customer and financial data in regulated systems.",
+          "Reconcile cash and currency holdings against system records at every close, and trace and document any differences.",
+          "Verify customer identity and complete KYC and AML documentation before transactions are released, following internal control procedures.",
+          "Handle confidential customer and financial data in regulated systems within an international financial services group.",
         ],
       },
       {
         place: "Odense Teater, Odense",
         title: "Front of House Host (part-time)",
         dates: "Sep 2025 to present",
-        points: ["Reconcile ticket sales and till takings against POS reports at close."],
+        points: ["Reconcile ticket sales and till takings against POS reports at close, and coordinate across teams on sold-out nights."],
       },
       {
         place: "Stavanger Konserthus, Stavanger",
         title: "Front of House Attendant",
         dates: "Aug 2023 to Aug 2025",
-        points: [],
+        points: ["Kept operations running across simultaneous events with security, technical and administrative staff."],
       },
       {
         place: "KIWI and Narvesen, Jørpeland",
         title: "Store Assistant",
         dates: "Oct 2019 to Aug 2023",
-        points: ["Daily till settlement and opening and closing routines."],
+        points: ["Daily till settlement and opening and closing routines in high-volume retail, alongside school and university."],
       },
     ],
   },
@@ -109,8 +109,7 @@ export const en: Content = {
         value:
           "Excel (advanced), PowerPoint (advanced), Word (advanced), SPSS (intermediate), SmartPLS (intermediate), Python (basic), SQL and Power BI (in development through coursework)",
       },
-      { label: "AI", value: "Claude, Claude Code and ChatGPT daily, to build tools and automate repetitive work" },
-      { label: "Work permit", value: "Norwegian citizen with full right to work in Denmark" },
+      { label: "AI", value: "Build finance tools with Claude Code; use Claude and ChatGPT daily to automate repetitive work" },
     ],
   },
   languages: {
@@ -118,7 +117,7 @@ export const en: Content = {
     rows: [
       { label: "Norwegian", value: "Native" },
       { label: "English", value: "Fluent (C1)" },
-      { label: "Danish", value: "Very good, near-fluent" },
+      { label: "Danish", value: "Fluent" },
     ],
   },
   other: {
@@ -136,6 +135,7 @@ export const en: Content = {
   cvDialog: {
     title: "Full CV (PDF)",
     intro: "Enter the code you received to download the CV.",
+    language: "CV language",
     label: "Code",
     submit: "Download",
     checking: "Checking…",
@@ -167,7 +167,7 @@ export const en: Content = {
       oneLiner:
         "A month-end close dashboard for budget against actual. AI drafts a comment on each significant variance, and the drafts are reviewed.",
       forWhom: "Controllers and finance teams at month-end close",
-      cardFinding: "September 2026: EBITDA of DKK 0,25m against a budget of DKK 1,55m.",
+      cardFinding: "Month-end variance dashboard for a fictional manufacturer. AI drafts the variance comments, and every figure is checked against the ledger. Reviewed a pre-registered sample: 16 of 18 agreed.",
       dataNote: "Data is fictional. Odense Demo Manufacturing ApS and its customers and suppliers do not exist.",
       problem:
         "At month-end close a controller must explain every large gap between budget and actual. Most of the work is finding the supplier, customer or invoice behind each gap. A language model can draft the comments, but only if every number and claim can be checked against the ledger.",
@@ -198,7 +198,7 @@ export const en: Content = {
       oneLiner:
         "A cash, burn and runway dashboard for a fictional Danish SaaS startup, with AI-drafted investor updates that a script checks.",
       forWhom: "Founders and finance staff at startups and scale-ups",
-      cardFinding: "Sep 2026: 14,3 months of runway at current burn.",
+      cardFinding: "Cash, burn and runway dashboard for a fictional SaaS startup, with scenario sliders and AI-drafted investor updates. 94 of 94 figures checked.",
       dataNote: "Data is fictional. Nordlys Analytics ApS does not exist, and a script generated every figure.",
       problem:
         "Every month a startup founder has to know how long the cash will last at the current burn. Investors then want a short update on what changed. This project answers both for one fictional company, and every number traces back to one SQL file.",
@@ -229,7 +229,7 @@ export const en: Content = {
       oneLiner:
         "An AML alert queue for a fictional Danish payment company. Rules flag transfers, AI drafts a case note and suggests a next step, and an analyst decides.",
       forWhom: "Compliance, AML and risk teams",
-      cardFinding: "The rules caught 27 of the 30 planted customers.",
+      cardFinding: "Rule-based alerts and AI case summaries on synthetic transactions. The AI orders the queue and an analyst decides. It flagged 30 of 34 truly suspicious cases.",
       dataNote: "Data is fictional. Lysbro Pay ApS, its customers and every transfer are invented.",
       problem:
         "A payment company must watch its transfers for signs of money laundering. Rules catch behaviour that looks suspicious, but most alerts turn out to be ordinary. Analysts read every case to decide what to escalate.",

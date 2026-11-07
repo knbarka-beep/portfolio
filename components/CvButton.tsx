@@ -2,9 +2,18 @@
 
 import { useId, useRef, useState } from "react";
 import type { Content } from "@/content/types";
+import type { Locale } from "@/lib/site";
 import { ExternalLink } from "./ExternalLink";
 
+// The CV comes in three languages. Names stay in their own language, like a language menu.
+const cvLangs = [
+  { value: "en", name: "English" },
+  { value: "da", name: "Dansk" },
+  { value: "no", name: "Norsk" },
+] as const;
+
 type Props = {
+  lang: Locale;
   labels: Content["cvDialog"];
   buttonLabel: string;
   available: boolean;
@@ -15,7 +24,7 @@ type Props = {
 
 type Status = "idle" | "checking" | "wrong" | "done" | "error" | "unavailable";
 
-export function CvButton({ labels, buttonLabel, available, linkedin, newTabLabel, variant = "outline" }: Props) {
+export function CvButton({ lang, labels, buttonLabel, available, linkedin, newTabLabel, variant = "outline" }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const id = useId();
   const [status, setStatus] = useState<Status>(available ? "idle" : "unavailable");
@@ -30,13 +39,13 @@ export function CvButton({ labels, buttonLabel, available, linkedin, newTabLabel
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const code = new FormData(form).get("code");
+    const data = new FormData(form);
     setStatus("checking");
     try {
       const res = await fetch("/api/cv", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code: data.get("code"), lang: data.get("lang") }),
       });
       if (res.status === 401) return setStatus("wrong");
       if (res.status === 503) return setStatus("unavailable");
@@ -44,7 +53,8 @@ export function CvButton({ labels, buttonLabel, available, linkedin, newTabLabel
       const url = URL.createObjectURL(await res.blob());
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Knut-Barka-CV.pdf";
+      // Use the server's file name: it says which language was actually sent.
+      a.download = res.headers.get("content-disposition")?.match(/filename="(.+)"/)?.[1] ?? "Knut-Barka-CV.pdf";
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
       form.reset();
@@ -91,6 +101,20 @@ export function CvButton({ labels, buttonLabel, available, linkedin, newTabLabel
           ) : (
             <form onSubmit={submit} className="mt-3">
               <p className="text-muted">{labels.intro}</p>
+              <fieldset className="mt-5">
+                <legend className="text-[14px] font-medium">{labels.language}</legend>
+                <div className="mt-1.5 grid grid-cols-3 gap-1 rounded-xl border border-line bg-bg p-1">
+                  {cvLangs.map((option) => (
+                    <label
+                      key={option.value}
+                      className="flex h-10 cursor-pointer items-center justify-center rounded-lg text-[15px] text-muted hover:text-text has-[:checked]:bg-btn has-[:checked]:text-on-btn has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-current"
+                    >
+                      <input type="radio" name="lang" value={option.value} defaultChecked={option.value === lang} className="sr-only" />
+                      <span lang={option.value === "no" ? "nb" : option.value}>{option.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
               <label htmlFor={`${id}-code`} className="mt-5 block text-[14px] font-medium">
                 {labels.label}
               </label>

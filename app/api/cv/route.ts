@@ -1,18 +1,23 @@
 import { get } from "@vercel/blob";
-import { handleCvRequest, type PdfBody } from "@/lib/cv";
+import { handleCvRequest, type CvLang, type PdfBody } from "@/lib/cv";
 
-// Path of the CV inside the private Blob store (uploaded in Part B).
-const BLOB_PATH = "cv/Knut-Barka-CV.pdf";
+// Path of each CV inside the private Blob store, for example cv/Knut-Barka-CV-DA.pdf.
+const blobPath = (lang: CvLang) => `cv/Knut-Barka-CV-${lang.toUpperCase()}.pdf`;
 
-async function readPdf(): Promise<PdfBody | null> {
-  // Local testing only: in `next dev`, CV_DEV_FILE can point to a dummy PDF. Never used in production.
-  if (process.env.NODE_ENV === "development" && process.env.CV_DEV_FILE) {
+async function readPdf(lang: CvLang): Promise<PdfBody | null> {
+  // Local testing only: in `next dev`, read private/cv-<lang>.pdf. Never used in production,
+  // and next.config.ts keeps private/ out of the build trace.
+  if (process.env.NODE_ENV === "development") {
     const { readFile } = await import("node:fs/promises");
-    return new Uint8Array(await readFile(process.env.CV_DEV_FILE));
+    try {
+      return new Uint8Array(await readFile(`${process.cwd()}/private/cv-${lang}.pdf`));
+    } catch {
+      return null;
+    }
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
   try {
-    const result = await get(BLOB_PATH, { access: "private", useCache: false });
+    const result = await get(blobPath(lang), { access: "private", useCache: false });
     return result?.statusCode === 200 ? result.stream : null;
   } catch {
     return null;

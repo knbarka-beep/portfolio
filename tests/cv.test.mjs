@@ -9,14 +9,40 @@ const post = (body) =>
   new Request("http://x/api/cv", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body) });
 const opts = { passcode: "fjord-lighthouse-42", readPdf: async () => fakePdf, wrongCodeDelayMs: 50 };
 
+const disposition = (lang) => `attachment; filename="Knut-Barka-CV-${lang}.pdf"`;
+
 test("right code streams the PDF as an attachment, never cached", async () => {
   const res = await handleCvRequest(post({ code: "fjord-lighthouse-42" }), opts);
   assert.equal(res.status, 200);
   assert.equal(res.headers.get("content-type"), "application/pdf");
-  assert.equal(res.headers.get("content-disposition"), 'attachment; filename="Knut-Barka-CV.pdf"');
+  assert.equal(res.headers.get("content-disposition"), disposition("EN"));
   assert.equal(res.headers.get("cache-control"), "private, no-store");
   assert.match(res.headers.get("x-robots-tag"), /noindex/);
   assert.deepEqual(new Uint8Array(await res.arrayBuffer()), fakePdf);
+});
+
+test("lang picks the file; unknown lang gives English; a missing language falls back to English", async () => {
+  const asked = [];
+  const files = { en: fakePdf, da: new TextEncoder().encode("da pdf") };
+  const readPdf = async (lang) => (asked.push(lang), files[lang] ?? null);
+  const run = (lang) => handleCvRequest(post({ code: "fjord-lighthouse-42", lang }), { ...opts, readPdf });
+
+  const da = await run("da");
+  assert.equal(da.headers.get("content-disposition"), disposition("DA"));
+  assert.equal(await da.text(), "da pdf");
+
+  for (const lang of ["de", "../x", 7, undefined]) {
+    asked.length = 0;
+    const res = await run(lang);
+    assert.equal(res.headers.get("content-disposition"), disposition("EN"));
+    assert.deepEqual(asked, ["en"], "unknown lang never reaches readPdf");
+  }
+
+  asked.length = 0;
+  const no = await run("no");
+  assert.equal(no.status, 200);
+  assert.equal(no.headers.get("content-disposition"), disposition("EN"));
+  assert.deepEqual(asked, ["no", "en"]);
 });
 
 test("wrong, empty, too long or broken input gives 'Wrong code' after the delay", async () => {

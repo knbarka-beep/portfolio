@@ -58,11 +58,33 @@ test("no master thesis or ECIT", () => {
   }
 });
 
+// Exactly the levels in private/cv-en.pdf, cv-da.pdf and cv-no.pdf. Tools are row 2 of Skills.
+const levels = {
+  en: {
+    tools: "Excel (advanced), PowerPoint (advanced), Word (advanced), SPSS (intermediate), SmartPLS (intermediate), Python (basic), SQL and Power BI (in development through coursework)",
+    languages: ["Native", "Fluent (C1)", "Fluent"],
+  },
+  da: {
+    tools: "Excel (avanceret), PowerPoint (avanceret), Word (avanceret), SPSS (mellemniveau), SmartPLS (mellemniveau), Python (grundlæggende), SQL og Power BI (under udvikling gennem studiet)",
+    languages: ["Modersmål", "Flydende (C1)", "Flydende"],
+  },
+  no: {
+    tools: "Excel (avansert), PowerPoint (avansert), Word (avansert), SPSS (middels), SmartPLS (middels), Python (grunnleggende), SQL og Power BI (under utvikling gjennom studiet)",
+    languages: ["Morsmål", "Flytende (C1)", "Flytende"],
+  },
+};
+
 test("skill and language levels are exactly as on the CV", () => {
-  const tools = content.en.skills.rows.find((r) => r.label === "Tools").value;
-  assert.equal(
-    tools,
-    "Excel (advanced), PowerPoint (advanced), Word (advanced), SPSS (intermediate), SmartPLS (intermediate), Python (basic), SQL and Power BI (in development through coursework)",
-  );
-  assert.deepEqual(content.en.languages.rows.map((r) => r.value), ["Native", "Fluent (C1)", "Very good, near-fluent"]);
+  for (const lang of langs) {
+    assert.equal(content[lang].skills.rows[1].value, levels[lang].tools, `${lang} tools`);
+    assert.deepEqual(content[lang].languages.rows.map((r) => r.value), levels[lang].languages, `${lang} languages`);
+  }
+});
+
+test("no work permit line", () => {
+  for (const lang of langs) {
+    for (const [path, text] of strings(content[lang])) {
+      assert.ok(!/work permit|right to work|arbejdstilladelse|arbeidstillatelse|statsborger/i.test(text), `${lang} ${path}`);
+    }
+  }
 });

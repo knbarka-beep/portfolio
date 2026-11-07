@@ -18,9 +18,9 @@ Light is the default. On the first visit the site follows the computer's setting
 
 - The PDF is stored in a private Vercel Blob store. A private store has no public address: only the server, with a secret token, can read it.
 - The passcode is an environment variable, `CV_PASSCODE`, set in Vercel. It is not in the code, not sent to the browser and never written to a log. Knut sets it himself.
-- "Full CV (PDF)" opens a small window with one field. The browser sends the code to `/api/cv`.
+- The CV exists in English, Danish and Norwegian. "Full CV (PDF)" opens a small window with a language choice (English, Dansk, Norsk, starting on the language of the page) and one field for the code. The browser sends the code and the language to `/api/cv`.
 - The server compares the code with `CV_PASSCODE`. It turns both into a fixed-length fingerprint (SHA-256) and compares those in constant time, so the time it takes does not reveal how many characters were right.
-- Right code: the server reads the PDF from Blob and sends it as a download called `Knut-Barka-CV.pdf`, marked so browsers and proxies do not keep a copy (`Cache-Control: private, no-store`).
+- Right code: the server reads that language's PDF from Blob (`cv/Knut-Barka-CV-EN.pdf`, `-DA.pdf` or `-NO.pdf`) and sends it as a download with the same name, marked so browsers and proxies do not keep a copy (`Cache-Control: private, no-store`).
 - Wrong code: the server waits about one second and answers "Wrong code". No hint. The wait makes guessing slow.
 - No cookie: the code is asked for every time. That keeps the site free of cookies and banners.
 - If the passcode or the Blob store is missing, the button still shows, and the window says "The full CV is available on request" with a link to LinkedIn. The build does not fail.
@@ -28,7 +28,9 @@ Light is the default. On the first visit the site follows the computer's setting
 
 **Be honest about what this is.** It is simple protection for a CV, not security for sensitive data. Anyone who gets the code can pass it on, and anyone who gets the PDF can share the file. Knut can change the code at any time in Vercel (Settings, Environment Variables), followed by a redeploy, and every old code stops working.
 
-The code is in `lib/cv.ts` (the check, which tests can run with a fake PDF) and `app/api/cv/route.ts` (reads the real file from Blob).
+- Any language value other than en, da or no counts as English. If the chosen language has no file in Blob, the English CV is sent.
+
+The code is in `lib/cv.ts` (the check and the language choice, which tests can run with a fake PDF) and `app/api/cv/route.ts` (reads the real file from Blob). In `next dev` the route reads `private/cv-en.pdf`, `cv-da.pdf` or `cv-no.pdf` instead; `next.config.ts` keeps `private/` out of the build.
 
 ## How the PDF stays out of the repo
 

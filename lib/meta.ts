@@ -14,5 +14,5 @@ export const ogLocale: Record<Locale, string> = { en: "en_GB", da: "da_DK", no: 
 export const cvAvailable = () =>
   Boolean(
     process.env.CV_PASSCODE &&
-      (process.env.BLOB_READ_WRITE_TOKEN || (process.env.NODE_ENV === "development" && process.env.CV_DEV_FILE)),
+      (process.env.BLOB_READ_WRITE_TOKEN || process.env.NODE_ENV === "development"),
   );

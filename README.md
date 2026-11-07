@@ -24,6 +24,6 @@ npm test             # after build: PDF, privacy, text and number checks
 npm run qa           # after build: headless Edge, screenshots to docs/screenshots/
 ```
 
-To try the CV download locally, run `next dev` with `CV_PASSCODE` and `CV_DEV_FILE` (a path to any test PDF) set. In production the PDF comes from Vercel Blob (`BLOB_READ_WRITE_TOKEN`).
+To try the CV download locally, put `cv-en.pdf`, `cv-da.pdf` and `cv-no.pdf` in `private/` and run `next dev` with `CV_PASSCODE` set. In production the PDF comes from Vercel Blob (`BLOB_READ_WRITE_TOKEN`).
 
 Built with Claude Code by Knut Barka. [LinkedIn](https://www.linkedin.com/in/knutbarka)

@@ -33,7 +33,7 @@ export const no: Content = {
   profile: {
     heading: "Profil",
     text: [
-      "Jeg tar en master i Economics and Business Administration ved SDU og blir ferdig sommeren 2027. Jeg har en bachelor i økonomi og administrasjon og en ettårig utdanning i dataanalyse. Grunnlaget mitt er regnskap, økonomistyring og finans, og jeg bruker AI hver dag til å bygge økonomiverktøy. Jeg ser etter en studentjobb eller deltidsjobb nå og en nyutdannet-stilling fra sommeren 2027, innen finance transformation, controlling, startup-økonomi eller compliance.",
+      "Masterstudent i økonomi og administrasjon (International Business and Management) ved SDU, ferdig sommeren 2027, med bachelor i økonomi og administrasjon og ett år med dataanalyse. Bygger økonomiverktøy med AI. Bakgrunn i regnskap, økonomistyring og foretaksfinans, avansert Excel og praktisk erfaring med avstemming og KYC/AML-arbeid i et regulert finanskonsern. Ønsker å starte innen finance transformation, der økonomiprosesser, data og teknologi møtes.",
     ],
   },
   education: {
@@ -41,60 +41,60 @@ export const no: Content = {
     items: [
       {
         place: "Syddansk Universitet (SDU), Odense",
-        title: "MSc in Economics and Business Administration, International Business and Management",
+        title: "Master i økonomi og administrasjon, International Business and Management",
         dates: "sep. 2025 til jun. 2027 (forventet)",
         points: [
-          "Kjerneemner: International Business Strategy, International Market Analytics, International Strategic Partnerships, Leading Across International Cultures and Markets.",
-          "Høsten 2026: Data Analytics in Accounting (Excel, SQL, Power BI) og AI in Accounting and Business.",
+          "Kjernefag: International Business Strategy, International Market Analytics (spørreskjemadesign og statistisk modellering), International Strategic Partnerships, Leading Across International Cultures and Markets.",
+          "Høst 2026: Data Analytics in Accounting (Excel, SQL, Power BI) og AI in Accounting and Business, begge med fokus på hvordan data og automatisering endrer økonomifunksjonen.",
         ],
       },
       {
         place: "Noroff School of Technology and Digital Media, nettbasert",
-        title: "Ettårig fagskole i dataanalyse (60 studiepoeng)",
+        title: "Årsstudium i dataanalyse (60 studiepoeng)",
         dates: "aug. 2024 til jun. 2025",
-        points: ["Datadrevne beslutninger, statistiske verktøy, datavisualisering og rapportering."],
+        points: ["Datadrevne beslutninger, regneark, statistiske verktøy, datavisualisering og rapportering av analyser."],
       },
       {
         place: "Universitetet i Stavanger",
         title: "Bachelor i økonomi og administrasjon",
         dates: "aug. 2021 til jun. 2024",
         points: [
-          "Relevante emner: Financial Accounting and Valuation, Corporate Finance, Management Accounting and Control, Fundamentals of Accounting and Business Economics, Statistics for Business and Economics.",
-          "Bacheloroppgave: verdsettelse av Vår Energi ASA.",
+          "Relevante emner: finansregnskap og verdsettelse, foretaksfinans, økonomistyring, grunnleggende regnskap og bedriftsøkonomi, statistikk.",
+          "Bacheloroppgave: Verdsettelse av Vår Energi ASA.",
         ],
       },
     ],
   },
   experience: {
-    heading: "Erfaring",
+    heading: "Arbeidserfaring",
     items: [
       {
         place: "Ria Financial Services (Euronet Worldwide), Odense",
         title: "Kasserer (deltid)",
         dates: "apr. 2026 til nå",
         points: [
-          "Avstemmer kontanter og valuta mot systemet ved hver stenging, og sporer og dokumenterer differanser.",
-          "Kontrollerer kundens identitet og fyller ut KYC- og AML-dokumentasjon før transaksjoner frigis.",
-          "Håndterer fortrolige kunde- og økonomidata i regulerte systemer.",
+          "Avstemmer kontant- og valutabeholdning mot systemet ved hver stenging, og sporer og dokumenterer eventuelle avvik.",
+          "Kontrollerer kundens identitet og fullfører KYC- og AML-dokumentasjon før transaksjoner frigis, etter interne kontrollrutiner.",
+          "Håndterer konfidensielle kunde- og økonomidata i regulerte systemer i et internasjonalt finanskonsern.",
         ],
       },
       {
         place: "Odense Teater, Odense",
-        title: "Front of House-vert (deltid)",
+        title: "Publikumsvert (deltid)",
         dates: "sep. 2025 til nå",
-        points: ["Avstemmer billettsalg og kasse mot POS-rapporter ved stenging."],
+        points: ["Avstemmer billettsalg og kasse mot POS-rapporter ved stenging, og koordinerer på tvers av team på utsolgte kvelder."],
       },
       {
         place: "Stavanger Konserthus, Stavanger",
         title: "Publikumsvert",
         dates: "aug. 2023 til aug. 2025",
-        points: [],
+        points: ["Holdt driften i gang ved flere samtidige arrangementer sammen med sikkerhet, teknikk og administrasjon."],
       },
       {
         place: "KIWI og Narvesen, Jørpeland",
         title: "Butikkmedarbeider",
         dates: "okt. 2019 til aug. 2023",
-        points: ["Daglig kasseoppgjør og rutiner for åpning og stenging."],
+        points: ["Daglig kasseoppgjør og åpnings- og stengerutiner i travel dagligvarehandel, ved siden av skole og studier."],
       },
     ],
   },
@@ -103,15 +103,14 @@ export const no: Content = {
     rows: [
       {
         label: "Økonomi",
-        value: "Finansregnskap og økonomistyring, verdsettelse, finans, avstemming, KYC/AML-kontroller",
+        value: "Finansregnskap og økonomistyring, verdsettelse, foretaksfinans, avstemming, KYC/AML-kontroller",
       },
       {
         label: "Verktøy",
         value:
-          "Excel (avansert), PowerPoint (avansert), Word (avansert), SPSS (middels), SmartPLS (middels), Python (grunnleggende), SQL og Power BI (under utvikling gjennom emner)",
+          "Excel (avansert), PowerPoint (avansert), Word (avansert), SPSS (middels), SmartPLS (middels), Python (grunnleggende), SQL og Power BI (under utvikling gjennom studiet)",
       },
-      { label: "AI", value: "Claude, Claude Code og ChatGPT daglig, til å bygge verktøy og automatisere repeterende arbeid" },
-      { label: "Arbeidstillatelse", value: "Norsk statsborger med full rett til å jobbe i Danmark" },
+      { label: "AI", value: "Bygger økonomiverktøy med Claude Code; bruker Claude og ChatGPT daglig til å automatisere repeterende arbeid" },
     ],
   },
   languages: {
@@ -119,7 +118,7 @@ export const no: Content = {
     rows: [
       { label: "Norsk", value: "Morsmål" },
       { label: "Engelsk", value: "Flytende (C1)" },
-      { label: "Dansk", value: "Svært god, nesten flytende" },
+      { label: "Dansk", value: "Flytende" },
     ],
   },
   other: {
@@ -137,6 +136,7 @@ export const no: Content = {
   cvDialog: {
     title: "Full CV (PDF)",
     intro: "Skriv inn koden du har fått for å laste ned CV-en.",
+    language: "Språk på CV-en",
     label: "Kode",
     submit: "Last ned",
     checking: "Sjekker…",
@@ -168,7 +168,7 @@ export const no: Content = {
       oneLiner:
         "Et dashboard for månedsavslutning med budsjett mot faktisk. AI skriver et utkast til kommentar for hvert vesentlig avvik, og utkastene blir gjennomgått.",
       forWhom: "Controllere og økonomiavdelinger ved månedsavslutning",
-      cardFinding: "September 2026: EBITDA på DKK 0,25 mill. mot et budsjett på DKK 1,55 mill.",
+      cardFinding: "Dashboard for månedsavslutning og avvik for en fiktiv produksjonsbedrift. AI skriver utkast til avvikskommentarene, og hvert tall kontrolleres mot hovedboken. Gjennomgikk et forhåndsregistrert utvalg: 16 av 18 stemte.",
       dataNote: "Dataene er fiktive. Odense Demo Manufacturing ApS og kundene og leverandørene finnes ikke.",
       problem:
         "Ved månedsavslutning må en controller forklare alle store avvik mellom budsjett og faktisk. Det meste av jobben er å finne leverandøren, kunden eller fakturaen bak hvert avvik. En språkmodell kan skrive utkast til kommentarene, men bare hvis hvert tall og hver påstand kan sjekkes mot hovedboken.",
@@ -199,7 +199,7 @@ export const no: Content = {
       oneLiner:
         "Et dashboard for kontanter, burn og runway i en fiktiv dansk SaaS-startup, med AI-utkast til investoroppdateringer som et skript sjekker.",
       forWhom: "Gründere og økonomifolk i startups og scale-ups",
-      cardFinding: "14,3 måneders runway ved dagens burn i sep. 2026.",
+      cardFinding: "Dashboard for kontanter, burn og runway for en fiktiv SaaS-startup, med scenarioskyvere og AI-utkast til investoroppdateringer. 94 av 94 tall kontrollert.",
       dataNote: "Dataene er fiktive. Nordlys Analytics ApS finnes ikke, og et skript har laget hvert tall.",
       problem:
         "Hver måned må en gründer vite hvor lenge pengene rekker med dagens forbruk. Investorene vil så ha en kort oppdatering om hva som har endret seg. Prosjektet svarer på begge deler for ett fiktivt selskap, og hvert tall kan spores til én SQL-fil.",
@@ -230,7 +230,7 @@ export const no: Content = {
       oneLiner:
         "En AML-varselkø for et fiktivt dansk betalingsselskap. Regler flagger overføringer, AI skriver et utkast til saksnotat og foreslår neste steg, og en analytiker bestemmer.",
       forWhom: "Compliance-, AML- og risikoteam",
-      cardFinding: "Reglene fanget 27 av de 30 innlagte kundene.",
+      cardFinding: "Regelbaserte varsler og AI-oppsummeringer av saker på syntetiske transaksjoner. AI-en prioriterer køen, og en analytiker bestemmer. Den fanget 30 av 34 reelt mistenkelige saker.",
       dataNote: "Dataene er fiktive. Lysbro Pay ApS, kundene og alle overføringer er oppdiktet.",
       problem:
         "Et betalingsselskap må følge med på overføringene sine for tegn på hvitvasking. Regler fanger atferd som ser mistenkelig ut, men de fleste varslene viser seg å være vanlige. Analytikere leser hver sak og bestemmer hva som skal eskaleres.",

@@ -116,7 +116,7 @@ export default async function CvPage({ params }: PageProps<"/[lang]">) {
               <a href="#projects" className="pill pill-primary">
                 {t.hero.seeProjects}
               </a>
-              <CvButton labels={t.cvDialog} buttonLabel={t.hero.fullCv} available={available} linkedin={links.linkedin} newTabLabel={t.nav.newTab} />
+              <CvButton lang={lang} labels={t.cvDialog} buttonLabel={t.hero.fullCv} available={available} linkedin={links.linkedin} newTabLabel={t.nav.newTab} />
               <ExternalLink
                 href={links.linkedin}
                 newTabLabel={t.nav.newTab}
@@ -204,7 +204,7 @@ export default async function CvPage({ params }: PageProps<"/[lang]">) {
           <ExternalLink href={links.linkedin} newTabLabel={t.nav.newTab} className="pill pill-primary">
             LinkedIn
           </ExternalLink>
-          <CvButton labels={t.cvDialog} buttonLabel={t.hero.fullCv} available={available} linkedin={links.linkedin} newTabLabel={t.nav.newTab} />
+          <CvButton lang={lang} labels={t.cvDialog} buttonLabel={t.hero.fullCv} available={available} linkedin={links.linkedin} newTabLabel={t.nav.newTab} />
           <p className="text-[15px] text-muted">{t.contact.onRequest}</p>
         </div>
       </Section>

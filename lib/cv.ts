@@ -2,10 +2,15 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 
 export type PdfBody = ReadableStream<Uint8Array> | Uint8Array;
+export type CvLang = "en" | "da" | "no";
+
+const cvLangs: readonly string[] = ["en", "da", "no"];
+export const toCvLang = (value: unknown): CvLang =>
+  typeof value === "string" && cvLangs.includes(value) ? (value as CvLang) : "en";
 
 type Options = {
   passcode: string | undefined;
-  readPdf: () => Promise<PdfBody | null>;
+  readPdf: (lang: CvLang) => Promise<PdfBody | null>;
   wrongCodeDelayMs?: number;
 };
 
@@ -30,9 +35,11 @@ export async function handleCvRequest(request: Request, options: Options): Promi
   if (!passcode) return text("The full CV is available on request.", 503);
 
   let code = "";
+  let lang: CvLang = "en";
   try {
-    const body = (await request.json()) as { code?: unknown };
+    const body = (await request.json()) as { code?: unknown; lang?: unknown };
     if (typeof body.code === "string" && body.code.length <= 200) code = body.code;
+    lang = toCvLang(body.lang);
   } catch {
     // A body that is not JSON counts as a wrong code.
   }
@@ -42,7 +49,12 @@ export async function handleCvRequest(request: Request, options: Options): Promi
     return text("Wrong code", 401);
   }
 
-  const pdf = await readPdf();
+  // If the chosen language is missing, serve the English CV.
+  let pdf = await readPdf(lang);
+  if (!pdf && lang !== "en") {
+    lang = "en";
+    pdf = await readPdf(lang);
+  }
   if (!pdf) return text("The full CV is available on request.", 503);
 
   return new Response(pdf as BodyInit, {
@@ -50,7 +62,7 @@ export async function handleCvRequest(request: Request, options: Options): Promi
     headers: {
       ...baseHeaders,
       "Content-Type": "application/pdf",
-      "Content-Disposition": 'attachment; filename="Knut-Barka-CV.pdf"',
+      "Content-Disposition": `attachment; filename="Knut-Barka-CV-${lang.toUpperCase()}.pdf"`,
     },
   });
 }
