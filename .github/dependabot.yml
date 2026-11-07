@@ -1,13 +1,16 @@
-# Dependabot checks the npm packages once a week and opens a pull request when one has an update.
+# Security fixes only. Routine version updates are off (limit 0); Dependabot security updates
+# (switched on in the repo settings) still open pull requests when a package has a known vulnerability.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 0
     groups:
-      # react and react-dom must have the same version, or npm install fails. Update them in one pull request.
+      # react and react-dom must have the same version, or npm install fails. Fix them in one pull request.
       react:
+        applies-to: security-updates
         patterns:
           - "react"
           - "react-dom"
